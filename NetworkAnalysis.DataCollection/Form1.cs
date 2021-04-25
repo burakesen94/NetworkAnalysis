@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,10 +15,12 @@ namespace NetworkAnalysis.DataCollection
 {
     public partial class Form1 : Form
     {
+        private MySqlConnection _conn;
         public Form1()
         {
             InitializeComponent();
             CheckTmr_CollectData();
+            _conn = OpenDbConnection();
         }
 
         private async void tmr_CollectData_Tick(object sender, EventArgs e)
@@ -42,11 +45,13 @@ namespace NetworkAnalysis.DataCollection
             {
                 btn_Start.BackColor = Color.Red;
                 btn_Start.Text = "Stop";
+                OpenDbConnection();
             }
             else
             {
                 btn_Start.BackColor = Color.Green;
                 btn_Start.Text = "Start";
+                CloseDbConnection();
             }
         }
 
@@ -79,7 +84,7 @@ namespace NetworkAnalysis.DataCollection
                         string weight = node.SelectSingleNode(@"./span/span[2]").InnerText;
                         if(!string.IsNullOrEmpty(tag))
                         {
-                            AddTagToLists(tag, weight);
+                            await AddTagToDb(selectedTag, tag, weight);
                         }
                         else
                         {
@@ -115,25 +120,48 @@ namespace NetworkAnalysis.DataCollection
             lbl_RelatedTags.Text = $"Related Tags ({lb_RelatedTags.Items.Count})";
         }
 
-        private void AddTagToDb(string tag, string weight)
+        private async Task AddTagToDb(string src, string trg, string weight)
         {
-            string _tag = tag.Trim();
-            string _weight = weight.Trim();
-
-            lb_RelatedTags.Items.Add($"{_tag}\t\t{_weight}"); 
-            lbl_RelatedTags.Text = $"Related Tags ({lb_RelatedTags.Items.Count})";
-
-            if (!lb_tagsToCollectData.Items.Contains(_tag))
+            using (var command = _conn.CreateCommand())
             {
-                lb_tagsToCollectData.Items.Add(_tag);
-                lbl_TagsToCollection.Text = $"Tags to Collection ({lb_tagsToCollectData.Items.Count})"; ;
+                command.CommandText = $@"CALL AddTagConnection('{src}', '{trg}', {weight});";
+                await command.ExecuteNonQueryAsync(); 
+                AddTagToLists(trg, weight);
             }
-        }
+        }        
 
         private void btn_Start_Click(object sender, EventArgs e)
         {
             tmr_CollectData.Enabled = !tmr_CollectData.Enabled;
             CheckTmr_CollectData();
+        }
+
+        private MySqlConnection OpenDbConnection()
+        {
+            var builder = new MySqlConnectionStringBuilder
+            {
+                Server = "",
+                Database = "",
+                UserID = "",
+                Password = "",
+                SslMode = MySqlSslMode.Required,
+            };
+
+            if (_conn == null)
+                _conn = new MySqlConnection(builder.ConnectionString);
+
+            _conn.OpenAsync();
+            return _conn;
+        }
+
+        private void CloseDbConnection()
+        {
+            if(_conn != null)
+            {
+                _conn.Close();
+                _conn.Dispose();
+                _conn = null;
+            }
         }
     }
 }
