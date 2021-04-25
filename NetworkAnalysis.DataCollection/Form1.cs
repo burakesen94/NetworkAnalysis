@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -100,7 +101,7 @@ namespace NetworkAnalysis.DataCollection
             string _tag = tag.Trim();
             string _weight = weight.Trim();
 
-            lb_RelatedTags.Items.Add($"{_tag.PadRight(50)}{_weight.PadLeft(15)}");
+            lb_RelatedTags.Items.Add($"{_tag.PadRight(20)}\t\t{_weight.PadLeft(20)}");
             UpdateLbRelatedTags();
 
             if (!lb_tagsToCollectData.Items.Contains(_tag))
@@ -140,10 +141,10 @@ namespace NetworkAnalysis.DataCollection
         {
             var builder = new MySqlConnectionStringBuilder
             {
-                Server = "",
-                Database = "",
-                UserID = "",
-                Password = "",
+                Server = " ",
+                Database = " ",
+                UserID = " ",
+                Password = " ",
                 SslMode = MySqlSslMode.Required,
             };
 
@@ -161,6 +162,69 @@ namespace NetworkAnalysis.DataCollection
                 _conn.Close();
                 _conn.Dispose();
                 _conn = null;
+            }
+        }
+
+        private void StopTimer()
+        {
+            tmr_CollectData.Enabled = false;
+            CheckTmr_CollectData();
+        }
+
+        private void btn_saveFile_Click(object sender, EventArgs e)
+        { 
+            try
+            {
+                StopTimer();
+                if (lb_tagsToCollectData.Items.Count > 0)
+                {
+                    using (StreamWriter writetext = new StreamWriter("save.txt"))
+                    {
+                        writetext.Flush();
+                        writetext.WriteLine(tb_SelectedTag.Text);
+                        foreach (var item in lb_tagsToCollectData.Items)
+                        {
+                            writetext.WriteLine(item.ToString());
+                        }
+                    }
+                    MessageBox.Show("Items are saved.");
+                }
+                else
+                {
+                    MessageBox.Show("No items found in list.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+        }
+
+        private void btn_loadFile_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                StopTimer();
+                if (lb_tagsToCollectData.Items.Count == 0)
+                {
+                    using (StreamReader readtext = new StreamReader("save.txt"))
+                    {
+                        lb_tagsToCollectData.Items.Clear();
+                        string line;
+                        while ((line = readtext.ReadLine()) != null)
+                            lb_tagsToCollectData.Items.Add(line);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("List is not epty.");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

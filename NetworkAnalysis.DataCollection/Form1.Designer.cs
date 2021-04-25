@@ -41,6 +41,8 @@ namespace NetworkAnalysis.DataCollection
             this.lbl_TagsToCollection = new System.Windows.Forms.Label();
             this.btn_TestDb = new System.Windows.Forms.Button();
             this.tmr_CollectData = new System.Windows.Forms.Timer(this.components);
+            this.btn_saveFile = new System.Windows.Forms.Button();
+            this.btn_loadFile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lb_RelatedTags
@@ -82,7 +84,7 @@ namespace NetworkAnalysis.DataCollection
             this.btn_Start.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btn_Start.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Start.ForeColor = System.Drawing.Color.White;
-            this.btn_Start.Location = new System.Drawing.Point(297, 538);
+            this.btn_Start.Location = new System.Drawing.Point(577, 537);
             this.btn_Start.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btn_Start.Name = "btn_Start";
             this.btn_Start.Size = new System.Drawing.Size(127, 42);
@@ -148,10 +150,10 @@ namespace NetworkAnalysis.DataCollection
             // btn_TestDb
             // 
             this.btn_TestDb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_TestDb.Location = new System.Drawing.Point(25, 538);
+            this.btn_TestDb.Location = new System.Drawing.Point(19, 538);
             this.btn_TestDb.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btn_TestDb.Name = "btn_TestDb";
-            this.btn_TestDb.Size = new System.Drawing.Size(100, 42);
+            this.btn_TestDb.Size = new System.Drawing.Size(76, 42);
             this.btn_TestDb.TabIndex = 9;
             this.btn_TestDb.Text = "Test DB";
             this.btn_TestDb.UseVisualStyleBackColor = true;
@@ -162,11 +164,37 @@ namespace NetworkAnalysis.DataCollection
             this.tmr_CollectData.Interval = 10000;
             this.tmr_CollectData.Tick += new System.EventHandler(this.tmr_CollectData_Tick);
             // 
+            // btn_saveFile
+            // 
+            this.btn_saveFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_saveFile.Location = new System.Drawing.Point(103, 538);
+            this.btn_saveFile.Margin = new System.Windows.Forms.Padding(4);
+            this.btn_saveFile.Name = "btn_saveFile";
+            this.btn_saveFile.Size = new System.Drawing.Size(97, 42);
+            this.btn_saveFile.TabIndex = 10;
+            this.btn_saveFile.Text = "Save Lists To File";
+            this.btn_saveFile.UseVisualStyleBackColor = true;
+            this.btn_saveFile.Click += new System.EventHandler(this.btn_saveFile_Click);
+            // 
+            // btn_loadFile
+            // 
+            this.btn_loadFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_loadFile.Location = new System.Drawing.Point(208, 538);
+            this.btn_loadFile.Margin = new System.Windows.Forms.Padding(4);
+            this.btn_loadFile.Name = "btn_loadFile";
+            this.btn_loadFile.Size = new System.Drawing.Size(97, 42);
+            this.btn_loadFile.TabIndex = 11;
+            this.btn_loadFile.Text = "Load Lists From File";
+            this.btn_loadFile.UseVisualStyleBackColor = true;
+            this.btn_loadFile.Click += new System.EventHandler(this.btn_loadFile_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 592);
+            this.Controls.Add(this.btn_loadFile);
+            this.Controls.Add(this.btn_saveFile);
             this.Controls.Add(this.btn_TestDb);
             this.Controls.Add(this.lbl_TagsToCollection);
             this.Controls.Add(this.lbl_RelatedTags);
@@ -199,6 +227,8 @@ namespace NetworkAnalysis.DataCollection
         private System.Windows.Forms.Button btn_TestDb;
         private System.Windows.Forms.Timer tmr_CollectData;
         private System.Windows.Forms.Button btn_Start;
+        private System.Windows.Forms.Button btn_saveFile;
+        private System.Windows.Forms.Button btn_loadFile;
     }
 }
 
