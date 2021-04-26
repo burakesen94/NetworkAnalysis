@@ -22,6 +22,7 @@ namespace NetworkAnalysis.DataCollection
             InitializeComponent();
             CheckTmr_CollectData();
             _conn = OpenDbConnection();
+            FireEvent("Program is ready.");
         }
 
         private async void tmr_CollectData_Tick(object sender, EventArgs e)
@@ -47,12 +48,16 @@ namespace NetworkAnalysis.DataCollection
                 btn_Start.BackColor = Color.Red;
                 btn_Start.Text = "Stop";
                 OpenDbConnection();
+                tmr_AutoSave.Enabled = true; 
+                FireEvent("Data collection has started.");
             }
             else
             {
                 btn_Start.BackColor = Color.Green;
                 btn_Start.Text = "Start";
                 CloseDbConnection();
+                tmr_AutoSave.Enabled = false;
+                FireEvent("Data collection has stopped.");
             }
         }
 
@@ -89,7 +94,7 @@ namespace NetworkAnalysis.DataCollection
                         }
                         else
                         {
-                            MessageBox.Show($"Empty value when {selectedTag} parsing...");
+                            FireEvent($"Empty value when {selectedTag} parsing...");
                         }
                     }
                 }
@@ -144,7 +149,7 @@ namespace NetworkAnalysis.DataCollection
                 Server = " ",
                 Database = " ",
                 UserID = " ",
-                Password = " ",
+                Password = " ", 
                 SslMode = MySqlSslMode.Required,
             };
 
@@ -172,13 +177,27 @@ namespace NetworkAnalysis.DataCollection
         }
 
         private void btn_saveFile_Click(object sender, EventArgs e)
-        { 
+        {
+            SaveFile(); 
+        }
+
+        private void btn_loadFile_Click(object sender, EventArgs e)
+        {
+            LoadFile();
+        }
+
+        private void SaveFile(bool isAutoSave = false)
+        {
             try
             {
-                StopTimer();
+                //StopTimer();
                 if (lb_tagsToCollectData.Items.Count > 0)
                 {
-                    using (StreamWriter writetext = new StreamWriter("save.txt"))
+                    var fileName = "save";
+                    if (isAutoSave) {
+                        fileName += DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss");
+                    }
+                    using (StreamWriter writetext = new StreamWriter(fileName + ".txt"))
                     {
                         writetext.Flush();
                         writetext.WriteLine(tb_SelectedTag.Text);
@@ -187,25 +206,24 @@ namespace NetworkAnalysis.DataCollection
                             writetext.WriteLine(item.ToString());
                         }
                     }
-                    MessageBox.Show("Items are saved.");
+                    FireEvent("Items are saved.");
                 }
                 else
                 {
-                    MessageBox.Show("No items found in list.");
+                    FireEvent("No items found in list.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                FireEvent(ex.Message);
             }
-            
         }
 
-        private void btn_loadFile_Click(object sender, EventArgs e)
+        private void LoadFile()
         {
             try
             {
-                StopTimer();
+                //StopTimer();
                 if (lb_tagsToCollectData.Items.Count == 0)
                 {
                     using (StreamReader readtext = new StreamReader("save.txt"))
@@ -218,14 +236,24 @@ namespace NetworkAnalysis.DataCollection
                 }
                 else
                 {
-                    MessageBox.Show("List is not epty.");
+                    FireEvent("List is not epty.");
                 }
-                
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                FireEvent(ex.Message);
             }
+        }
+
+        private void tmr_AutoSave_Tick(object sender, EventArgs e)
+        {
+            SaveFile();
+        }
+
+        private void FireEvent(string msg)
+        {
+            lbl_Event.Text = $"{DateTime.Now} : {msg}";
         }
     }
 }

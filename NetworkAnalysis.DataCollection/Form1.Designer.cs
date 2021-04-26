@@ -43,6 +43,8 @@ namespace NetworkAnalysis.DataCollection
             this.tmr_CollectData = new System.Windows.Forms.Timer(this.components);
             this.btn_saveFile = new System.Windows.Forms.Button();
             this.btn_loadFile = new System.Windows.Forms.Button();
+            this.tmr_AutoSave = new System.Windows.Forms.Timer(this.components);
+            this.lbl_Event = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lb_RelatedTags
@@ -52,7 +54,7 @@ namespace NetworkAnalysis.DataCollection
             this.lb_RelatedTags.IntegralHeight = false;
             this.lb_RelatedTags.ItemHeight = 16;
             this.lb_RelatedTags.Location = new System.Drawing.Point(20, 112);
-            this.lb_RelatedTags.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lb_RelatedTags.Margin = new System.Windows.Forms.Padding(4);
             this.lb_RelatedTags.Name = "lb_RelatedTags";
             this.lb_RelatedTags.Size = new System.Drawing.Size(425, 418);
             this.lb_RelatedTags.TabIndex = 0;
@@ -72,7 +74,7 @@ namespace NetworkAnalysis.DataCollection
             // 
             this.tb_SelectedTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tb_SelectedTag.Location = new System.Drawing.Point(135, 44);
-            this.tb_SelectedTag.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_SelectedTag.Margin = new System.Windows.Forms.Padding(4);
             this.tb_SelectedTag.Name = "tb_SelectedTag";
             this.tb_SelectedTag.Size = new System.Drawing.Size(223, 22);
             this.tb_SelectedTag.TabIndex = 2;
@@ -85,7 +87,7 @@ namespace NetworkAnalysis.DataCollection
             this.btn_Start.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Start.ForeColor = System.Drawing.Color.White;
             this.btn_Start.Location = new System.Drawing.Point(577, 537);
-            this.btn_Start.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_Start.Margin = new System.Windows.Forms.Padding(4);
             this.btn_Start.Name = "btn_Start";
             this.btn_Start.Size = new System.Drawing.Size(127, 42);
             this.btn_Start.TabIndex = 3;
@@ -97,7 +99,7 @@ namespace NetworkAnalysis.DataCollection
             // 
             this.tb_Address.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tb_Address.Location = new System.Drawing.Point(135, 12);
-            this.tb_Address.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_Address.Margin = new System.Windows.Forms.Padding(4);
             this.tb_Address.Name = "tb_Address";
             this.tb_Address.Size = new System.Drawing.Size(571, 22);
             this.tb_Address.TabIndex = 5;
@@ -120,7 +122,7 @@ namespace NetworkAnalysis.DataCollection
             this.lb_tagsToCollectData.FormattingEnabled = true;
             this.lb_tagsToCollectData.ItemHeight = 16;
             this.lb_tagsToCollectData.Location = new System.Drawing.Point(455, 112);
-            this.lb_tagsToCollectData.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lb_tagsToCollectData.Margin = new System.Windows.Forms.Padding(4);
             this.lb_tagsToCollectData.Name = "lb_tagsToCollectData";
             this.lb_tagsToCollectData.Size = new System.Drawing.Size(249, 420);
             this.lb_tagsToCollectData.TabIndex = 6;
@@ -151,7 +153,7 @@ namespace NetworkAnalysis.DataCollection
             // 
             this.btn_TestDb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_TestDb.Location = new System.Drawing.Point(19, 538);
-            this.btn_TestDb.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_TestDb.Margin = new System.Windows.Forms.Padding(4);
             this.btn_TestDb.Name = "btn_TestDb";
             this.btn_TestDb.Size = new System.Drawing.Size(76, 42);
             this.btn_TestDb.TabIndex = 9;
@@ -188,11 +190,30 @@ namespace NetworkAnalysis.DataCollection
             this.btn_loadFile.UseVisualStyleBackColor = true;
             this.btn_loadFile.Click += new System.EventHandler(this.btn_loadFile_Click);
             // 
+            // tmr_AutoSave
+            // 
+            this.tmr_AutoSave.Interval = 120000;
+            this.tmr_AutoSave.Tick += new System.EventHandler(this.tmr_AutoSave_Tick);
+            // 
+            // lbl_Event
+            // 
+            this.lbl_Event.AutoSize = true;
+            this.lbl_Event.BackColor = System.Drawing.Color.White;
+            this.lbl_Event.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_Event.Location = new System.Drawing.Point(8, 590);
+            this.lbl_Event.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbl_Event.Name = "lbl_Event";
+            this.lbl_Event.Padding = new System.Windows.Forms.Padding(10);
+            this.lbl_Event.Size = new System.Drawing.Size(110, 36);
+            this.lbl_Event.TabIndex = 12;
+            this.lbl_Event.Text = "2020 Ready";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(723, 592);
+            this.ClientSize = new System.Drawing.Size(723, 635);
+            this.Controls.Add(this.lbl_Event);
             this.Controls.Add(this.btn_loadFile);
             this.Controls.Add(this.btn_saveFile);
             this.Controls.Add(this.btn_TestDb);
@@ -206,7 +227,7 @@ namespace NetworkAnalysis.DataCollection
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lb_RelatedTags);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Data Collection - Network Analysis";
             this.ResumeLayout(false);
@@ -229,6 +250,8 @@ namespace NetworkAnalysis.DataCollection
         private System.Windows.Forms.Button btn_Start;
         private System.Windows.Forms.Button btn_saveFile;
         private System.Windows.Forms.Button btn_loadFile;
+        private System.Windows.Forms.Timer tmr_AutoSave;
+        private System.Windows.Forms.Label lbl_Event;
     }
 }
 
